@@ -85,49 +85,6 @@
             height: 100%;
         }
 
-        /* Player Info Overlay */
-        #player-overlay {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(15, 15, 35, 0.95);
-            padding: 20px;
-            border-radius: 20px;
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            backdrop-filter: blur(15px);
-            z-index: 500;
-            min-width: 220px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .player-stats {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-label {
-            color: #88ddff;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .stat-value {
-            font-weight: bold;
-            font-size: 15px;
-            color: #ffffff;
-        }
-
         /* Tabs Navigation */
         #tabs {
             display: flex;
@@ -295,6 +252,26 @@
             margin-bottom: 8px;
         }
 
+        .account-stat {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 153, 204, 0.1));
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            text-align: center;
+        }
+
+        .account-stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .account-stat-label {
+            font-size: 12px;
+            color: #88ddff;
+        }
+
         /* Location Permission */
         #location-permission {
             position: absolute;
@@ -345,61 +322,35 @@
             box-shadow: 0 15px 35px rgba(0, 212, 255, 0.7);
         }
 
-        /* Telegram Check */
-        #telegram-check {
+        /* Error Message */
+        .error-message {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(15, 15, 35, 0.98);
-            padding: 50px;
-            border-radius: 30px;
+            background: rgba(255, 68, 68, 0.95);
+            padding: 30px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
-            z-index: 1001;
-            border: 3px solid rgba(0, 212, 255, 0.5);
-            max-width: 450px;
+            box-shadow: 0 20px 50px rgba(255, 68, 68, 0.3);
+            z-index: 1002;
+            border: 2px solid #ff4444;
+            max-width: 350px;
             width: 90%;
-            backdrop-filter: blur(25px);
+            backdrop-filter: blur(15px);
         }
 
-        .telegram-title {
-            color: #00d4ff;
-            font-size: 26px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .telegram-text {
-            color: #88ddff;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .telegram-btn {
-            background: linear-gradient(135deg, #0088cc, #006699);
+        .error-title {
             color: white;
-            border: none;
-            padding: 15px 35px;
-            border-radius: 30px;
-            font-size: 16px;
+            font-size: 22px;
+            margin-bottom: 15px;
             font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.5);
-            text-decoration: none;
-            display: inline-block;
-            margin: 5px;
         }
 
-        .telegram-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0, 136, 204, 0.7);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.5);
+        .error-text {
+            color: #ffdddd;
+            margin-bottom: 20px;
+            line-height: 1.5;
         }
 
         /* Notifications */
@@ -442,18 +393,18 @@
             background: #1a1a2e !important;
         }
 
-        /* Player Zones */
+        /* Small Player Zones */
         .player-zone {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
+            width: 60px;
+            height: 60px;
             border: 2px solid;
             border-radius: 50%;
             pointer-events: none;
-            opacity: 0.3;
+            opacity: 0.4;
             transition: all 0.3s ease;
         }
 
@@ -469,8 +420,8 @@
         }
 
         @keyframes zonePulse {
-            0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.1); }
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.05); }
         }
     </style>
 </head>
@@ -485,24 +436,6 @@
         <!-- Map Container -->
         <div id="map-container">
             <div id="map"></div>
-            
-            <!-- Player Info Overlay -->
-            <div id="player-overlay">
-                <div class="player-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">🎯 Убийств:</span>
-                        <span class="stat-value" id="overlay-kills">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">💰 Заработано:</span>
-                        <span class="stat-value" id="overlay-earned">0 монет</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">⏱️ В игре:</span>
-                        <span class="stat-value" id="overlay-time">0м</span>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Tabs -->
@@ -551,35 +484,18 @@
                     <div class="kill-number" id="account-kills">0</div>
                     <div>УБИТЫХ ИГРОКОВ</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="account-coins">0</div>
-                    <div class="stat-label-large">ЗАРАБОТАНО МОНЕТ</div>
+                <div class="account-stat">
+                    <div class="account-stat-number" id="account-coins">0</div>
+                    <div class="account-stat-label">ЗАРАБОТАНО МОНЕТ</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="account-playtime">0м</div>
-                    <div class="stat-label-large">ВРЕМЯ В ИГРЕ</div>
+                <div class="account-stat">
+                    <div class="account-stat-number" id="account-playtime">0м</div>
+                    <div class="account-stat-label">ВРЕМЯ В ИГРЕ</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="account-efficiency">0%</div>
-                    <div class="stat-label-large">ЭФФЕКТИВНОСТЬ</div>
+                <div class="account-stat">
+                    <div class="account-stat-number" id="account-efficiency">0%</div>
+                    <div class="account-stat-label">ЭФФЕКТИВНОСТЬ</div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Telegram Check -->
-        <div id="telegram-check">
-            <div class="telegram-title">🔒 Требуется Telegram</div>
-            <div class="telegram-text">
-                Для игры необходимо открыть приложение через Telegram бота.<br>
-                Это обеспечивает безопасность и мультиплеер функционал.
-            </div>
-            <div style="margin-top: 25px;">
-                <a href="https://t.me/your_bot" class="telegram-btn btn-primary" target="_blank">
-                    📲 Открыть в Telegram
-                </a>
-                <button class="telegram-btn" onclick="continueAsGuest()">
-                    👻 Продолжить как гость
-                </button>
             </div>
         </div>
 
@@ -588,9 +504,24 @@
             <div class="permission-title">📍 Доступ к геолокации</div>
             <div class="permission-text">
                 Для участия в игре необходим доступ к вашему местоположению.<br>
-                Это позволит другим игрокам видеть вас на карте.
+                Без этого игра не будет работать!
             </div>
             <button id="grant-permission" class="permission-btn">Разрешить доступ</button>
+            <div style="margin-top: 20px;">
+                <button onclick="showError('Для игры необходимо разрешить доступ к геолокации')" 
+                        style="background: none; border: none; color: #88ddff; cursor: pointer; text-decoration: underline;">
+                    Не разрешать
+                </button>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message" class="error-message" style="display: none;">
+            <div class="error-title">❌ Ошибка</div>
+            <div class="error-text" id="error-text"></div>
+            <button onclick="location.reload()" class="permission-btn" style="background: linear-gradient(135deg, #ff4444, #cc0000);">
+                Попробовать снова
+            </button>
         </div>
     </div>
 
@@ -620,76 +551,111 @@
             totalEarned: 0
         };
 
+        // Загрузка сохраненных данных
+        function loadSavedData() {
+            try {
+                const saved = localStorage.getItem('survivalGameData');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    gameState.coins = data.coins || 0;
+                    gameState.kills = data.kills || 0;
+                    gameState.role = data.role || 'survivor';
+                    gameState.playTime = data.playTime || 0;
+                    gameState.totalEarned = data.totalEarned || 0;
+                    console.log('Данные загружены:', data);
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки данных:', e);
+            }
+        }
+
+        // Сохранение данных
+        function saveGameData() {
+            try {
+                const data = {
+                    coins: gameState.coins,
+                    kills: gameState.kills,
+                    role: gameState.role,
+                    playTime: gameState.playTime,
+                    totalEarned: gameState.totalEarned,
+                    lastSave: Date.now()
+                };
+                localStorage.setItem('survivalGameData', JSON.stringify(data));
+                console.log('Данные сохранены');
+            } catch (e) {
+                console.error('Ошибка сохранения данных:', e);
+            }
+        }
+
         // Инициализация приложения
         function initApp() {
+            loadSavedData();
             const telegramCheck = checkTelegramWebApp();
             
-            if (!telegramCheck) {
-                // Показываем экран проверки Telegram
-                document.getElementById('telegram-check').style.display = 'block';
-            } else {
-                // Прячем проверку Telegram и показываем запрос геолокации
-                document.getElementById('telegram-check').style.display = 'none';
+            if (telegramCheck) {
+                // Успешный вход через Telegram
                 document.getElementById('location-permission').style.display = 'block';
                 setupEventListeners();
                 updateUI();
+            } else {
+                // Не удалось определить Telegram
+                showError('Пожалуйста, откройте игру через Telegram бота для корректной работы');
             }
         }
 
         // Проверка Telegram Web App
         function checkTelegramWebApp() {
+            console.log('Проверка Telegram Web App...');
+            
             if (window.Telegram && Telegram.WebApp) {
                 try {
+                    console.log('Telegram WebApp обнаружен');
+                    
+                    // Инициализация Telegram WebApp
                     Telegram.WebApp.ready();
                     Telegram.WebApp.expand();
                     
                     const userData = Telegram.WebApp.initDataUnsafe?.user;
+                    console.log('Данные пользователя:', userData);
                     
                     if (userData && userData.id) {
                         gameState.isTelegramUser = true;
                         gameState.currentUser = {
                             id: userData.id,
-                            firstName: userData.first_name || 'Telegram',
+                            firstName: userData.first_name || 'Telegram User',
                             username: userData.username || 'user',
                             photoUrl: userData.photo_url,
                             isTelegram: true,
                             languageCode: userData.language_code
                         };
                         
-                        console.log('Telegram user detected:', gameState.currentUser);
+                        console.log('Успешная инициализация Telegram пользователя:', gameState.currentUser);
                         return true;
+                    } else {
+                        console.warn('Данные пользователя неполные');
                     }
                 } catch (error) {
-                    console.error('Error initializing Telegram Web App:', error);
+                    console.error('Ошибка инициализации Telegram Web App:', error);
                 }
+            } else {
+                console.warn('Telegram WebApp не обнаружен');
             }
             
-            // Если Telegram не обнаружен
             gameState.isTelegramUser = false;
             return false;
         }
 
-        // Продолжить как гость
-        function continueAsGuest() {
-            gameState.currentUser = {
-                id: 'guest_' + Date.now(),
-                firstName: 'Гость',
-                username: 'guest_' + Math.random().toString(36).substr(2, 8),
-                isTelegram: false
-            };
-            
-            document.getElementById('telegram-check').style.display = 'none';
-            document.getElementById('location-permission').style.display = 'block';
-            setupEventListeners();
-            updateUI();
-            
-            showNotification('👋 Добро пожаловать, Гость!', false);
+        // Показать ошибку
+        function showError(message) {
+            document.getElementById('error-text').textContent = message;
+            document.getElementById('error-message').style.display = 'block';
         }
 
         // Настройка обработчиков событий
         function setupEventListeners() {
             document.getElementById('grant-permission').addEventListener('click', requestLocationAccess);
             setInterval(updateGameState, 1000);
+            setInterval(saveGameData, 30000); // Сохраняем каждые 30 секунд
         }
 
         // Запрос доступа к геолокации
@@ -703,10 +669,7 @@
                     },
                     (error) => {
                         console.error('Ошибка геолокации:', error);
-                        // Используем координаты по умолчанию (Москва)
-                        initMap(55.7558, 37.6173);
-                        document.getElementById('location-permission').style.display = 'none';
-                        startGame();
+                        showError('Не удалось получить доступ к геолокации. Игра не может работать без этого.');
                     },
                     { 
                         enableHighAccuracy: true, 
@@ -715,20 +678,17 @@
                     }
                 );
             } else {
-                alert('Геолокация не поддерживается вашим браузером');
-                initMap(55.7558, 37.6173);
-                document.getElementById('location-permission').style.display = 'none';
-                startGame();
+                showError('Ваш браузер не поддерживает геолокацию');
             }
         }
 
-        // Инициализация карты (CartoDB Positron)
+        // Инициализация карты
         function initMap(lat, lng) {
-            gameState.map = L.map('map').setView([lat, lng], 15);
+            gameState.map = L.map('map').setView([lat, lng], 16);
             
-            // Используем красивую светлую карту CartoDB
+            // Красивая светлая карта
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
                 subdomains: 'abcd',
                 maxZoom: 20
             }).addTo(gameState.map);
@@ -737,18 +697,15 @@
             addPlayerToMap(gameState.currentUser, lat, lng, true);
         }
 
-        // Добавление игрока на карту с красивыми иконками
+        // Добавление игрока на карту
         function addPlayerToMap(player, lat, lng, isCurrentUser = false) {
             const isMonster = player.role === 'monster';
             
-            // Создаем красивую иконку
             const icon = L.AwesomeMarkers.icon({
                 icon: isMonster ? 'skull-crossbones' : 'user',
                 markerColor: isMonster ? 'red' : 'blue',
                 prefix: 'fa',
-                iconColor: 'white',
-                spin: false,
-                extraClasses: 'fa-beat'
+                iconColor: 'white'
             });
 
             const marker = L.marker([lat, lng], { 
@@ -758,7 +715,7 @@
             
             if (isCurrentUser) {
                 gameState.userMarker = marker;
-                // Создаем зону для текущего пользователя
+                // Создаем маленькую зону для текущего пользователя
                 createUserZone(lat, lng, isMonster);
                 
                 // Следим за перемещением пользователя
@@ -779,7 +736,7 @@
                 }
             }
 
-            // Красивый popup с информацией
+            // Popup с информацией
             const roleText = isMonster ? '👹 Монстр' : '🎯 Выживший';
             const statusText = isCurrentUser ? ' (Вы)' : '';
             
@@ -793,27 +750,26 @@
                         💀 Убийств: ${player.kills || 0}<br>
                         💰 Монет: ${player.coins || 0}
                     </div>
-                    ${player.isTelegram ? '<div style="margin-top: 5px; color: #0088cc;">📱 Telegram</div>' : ''}
                 </div>
             `);
 
             return marker;
         }
 
-        // Создание зоны вокруг пользователя
+        // Создание маленькой зоны вокруг пользователя
         function createUserZone(lat, lng, isMonster) {
             if (gameState.userZone) {
                 gameState.map.removeLayer(gameState.userZone);
             }
 
             const zoneColor = isMonster ? '#ff4444' : '#00d4ff';
-            const fillColor = isMonster ? '#ff4444' : '#00d4ff';
             
+            // Маленькая зона (30 метров)
             gameState.userZone = L.circle([lat, lng], {
                 color: zoneColor,
-                fillColor: fillColor,
+                fillColor: zoneColor,
                 fillOpacity: 0.1,
-                radius: 60, // 60 метров
+                radius: 30, // 30 метров - маленькая зона
                 weight: 2,
                 dashArray: '5, 5'
             }).addTo(gameState.map);
@@ -824,10 +780,10 @@
             // Добавляем текущего пользователя в список игроков
             gameState.players.set(gameState.currentUser.id, {
                 ...gameState.currentUser,
-                role: 'survivor',
+                role: gameState.role,
                 location: gameState.userMarker.getLatLng(),
-                coins: 0,
-                kills: 0
+                coins: gameState.coins,
+                kills: gameState.kills
             });
 
             updateUI();
@@ -836,9 +792,13 @@
             setInterval(() => {
                 gameState.playTime++;
                 updatePlayTime();
+                saveGameData(); // Сохраняем при обновлении времени
             }, 60000);
 
             showNotification('🎮 Добро пожаловать в игру!', false);
+            
+            // Сохраняем начальные данные
+            saveGameData();
         }
 
         // Показать уведомление
@@ -858,8 +818,6 @@
 
         // Обновление игрового состояния
         function updateGameState() {
-            // Здесь будет логика взаимодействия с другими реальными игроками
-            // через WebSocket или другую технологию реального времени
             updatePlayerCounts();
         }
 
@@ -871,22 +829,22 @@
             roleDisplay.className = `role-display ${gameState.role === 'monster' ? 'role-monster' : ''}`;
 
             document.getElementById('coins').textContent = gameState.coins;
-            document.getElementById('overlay-kills').textContent = gameState.kills;
-            document.getElementById('overlay-earned').textContent = gameState.totalEarned + ' монет';
             document.getElementById('account-kills').textContent = gameState.kills;
             document.getElementById('account-coins').textContent = gameState.coins;
 
             const accountAvatar = document.getElementById('account-avatar');
-            if (gameState.currentUser.photoUrl) {
+            if (gameState.currentUser && gameState.currentUser.photoUrl) {
                 accountAvatar.style.backgroundImage = `url(${gameState.currentUser.photoUrl})`;
                 accountAvatar.innerHTML = '';
             } else {
                 accountAvatar.style.backgroundImage = 'none';
-                accountAvatar.innerHTML = gameState.currentUser.firstName ? 
+                accountAvatar.innerHTML = gameState.currentUser && gameState.currentUser.firstName ? 
                     gameState.currentUser.firstName[0].toUpperCase() : '?';
             }
 
-            document.getElementById('account-username').textContent = gameState.currentUser.firstName;
+            if (gameState.currentUser) {
+                document.getElementById('account-username').textContent = gameState.currentUser.firstName;
+            }
             document.getElementById('account-role').textContent = 
                 gameState.role === 'monster' ? '👹 Монстр' : '🎯 Выживший';
         }
@@ -899,18 +857,15 @@
             
             const timeString = hours > 0 ? `${hours}ч ${mins}м` : `${mins}м`;
             
-            document.getElementById('overlay-time').textContent = timeString;
             document.getElementById('account-playtime').textContent = timeString;
             
-            // Обновляем эффективность (убийств в час)
+            // Обновляем эффективность
             const efficiency = hours > 0 ? Math.round((gameState.kills / hours) * 100) : gameState.kills * 100;
             document.getElementById('account-efficiency').textContent = efficiency + '%';
         }
 
         // Обновление счетчиков игроков
         function updatePlayerCounts() {
-            // В реальном приложении здесь будет запрос к серверу
-            // Для демо показываем только текущего пользователя
             document.getElementById('online-count').textContent = 1;
             document.getElementById('monsters-count').textContent = gameState.role === 'monster' ? 1 : 0;
             document.getElementById('survivors-count').textContent = gameState.role === 'survivor' ? 1 : 0;
@@ -933,6 +888,9 @@
 
         // Запуск приложения при загрузке
         document.addEventListener('DOMContentLoaded', initApp);
+
+        // Сохраняем данные при закрытии страницы
+        window.addEventListener('beforeunload', saveGameData);
     </script>
 </body>
 </html>
