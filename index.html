@@ -6,6 +6,7 @@
     <title>Survival Game</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
             margin: 0;
@@ -536,6 +537,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.awesome-markers/dist/leaflet.awesome-markers.min.js"></script>
     <script>
+        // Основной объект Telegram Web App
+        const tg = window.Telegram.WebApp;
+        
         // Игровые данные
         const gameState = {
             players: new Map(),
@@ -551,6 +555,36 @@
             totalEarned: 0
         };
 
+        // Функция для получения данных пользователя из Telegram
+        function getUserData() {
+            console.log('🔍 Проверка данных Telegram Web App...');
+            console.log('Telegram WebApp доступен:', !!tg);
+            console.log('initDataUnsafe:', tg.initDataUnsafe);
+            console.log('initData:', tg.initData);
+            
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                console.log('✅ Данные пользователя найдены в initDataUnsafe');
+                return tg.initDataUnsafe.user;
+            }
+            
+            if (tg.initData) {
+                try {
+                    console.log('🔍 Парсинг initData...');
+                    const urlParams = new URLSearchParams(tg.initData);
+                    const userStr = urlParams.get('user');
+                    if (userStr) {
+                        console.log('✅ Данные пользователя найдены в initData');
+                        return JSON.parse(decodeURIComponent(userStr));
+                    }
+                } catch (e) {
+                    console.error('❌ Ошибка парсинга initData:', e);
+                }
+            }
+            
+            console.log('❌ Данные пользователя не найдены');
+            return null;
+        }
+
         // Загрузка сохраненных данных
         function loadSavedData() {
             try {
@@ -562,7 +596,7 @@
                     gameState.role = data.role || 'survivor';
                     gameState.playTime = data.playTime || 0;
                     gameState.totalEarned = data.totalEarned || 0;
-                    console.log('Данные загружены:', data);
+                    console.log('💾 Данные загружены:', data);
                 }
             } catch (e) {
                 console.error('Ошибка загрузки данных:', e);
@@ -581,7 +615,7 @@
                     lastSave: Date.now()
                 };
                 localStorage.setItem('survivalGameData', JSON.stringify(data));
-                console.log('Данные сохранены');
+                console.log('💾 Данные сохранены');
             } catch (e) {
                 console.error('Ошибка сохранения данных:', e);
             }
@@ -589,56 +623,47 @@
 
         // Инициализация приложения
         function initApp() {
+            console.log('🚀 Запуск инициализации приложения...');
+            
+            // Инициализация Telegram Web App
+            tg.ready();
+            tg.expand();
+            
+            // Настройка внешнего вида
+            tg.setBackgroundColor('#0f0f23');
+            tg.setHeaderColor('#0f0f23');
+            
             loadSavedData();
             const telegramCheck = checkTelegramWebApp();
             
             if (telegramCheck) {
-                // Успешный вход через Telegram
+                console.log('✅ Успешный вход через Telegram');
                 document.getElementById('location-permission').style.display = 'block';
                 setupEventListeners();
                 updateUI();
             } else {
-                // Не удалось определить Telegram
+                console.log('❌ Не удалось определить Telegram');
                 showError('Пожалуйста, откройте игру через Telegram бота для корректной работы');
             }
         }
 
         // Проверка Telegram Web App
         function checkTelegramWebApp() {
-            console.log('Проверка Telegram Web App...');
+            const userData = getUserData();
             
-            if (window.Telegram && Telegram.WebApp) {
-                try {
-                    console.log('Telegram WebApp обнаружен');
-                    
-                    // Инициализация Telegram WebApp
-                    Telegram.WebApp.ready();
-                    Telegram.WebApp.expand();
-                    
-                    const userData = Telegram.WebApp.initDataUnsafe?.user;
-                    console.log('Данные пользователя:', userData);
-                    
-                    if (userData && userData.id) {
-                        gameState.isTelegramUser = true;
-                        gameState.currentUser = {
-                            id: userData.id,
-                            firstName: userData.first_name || 'Telegram User',
-                            username: userData.username || 'user',
-                            photoUrl: userData.photo_url,
-                            isTelegram: true,
-                            languageCode: userData.language_code
-                        };
-                        
-                        console.log('Успешная инициализация Telegram пользователя:', gameState.currentUser);
-                        return true;
-                    } else {
-                        console.warn('Данные пользователя неполные');
-                    }
-                } catch (error) {
-                    console.error('Ошибка инициализации Telegram Web App:', error);
-                }
-            } else {
-                console.warn('Telegram WebApp не обнаружен');
+            if (userData) {
+                gameState.isTelegramUser = true;
+                gameState.currentUser = {
+                    id: userData.id,
+                    firstName: userData.first_name || 'Telegram User',
+                    username: userData.username || 'user',
+                    photoUrl: userData.photo_url,
+                    isTelegram: true,
+                    languageCode: userData.language_code
+                };
+                
+                console.log('✅ Успешная инициализация Telegram пользователя:', gameState.currentUser);
+                return true;
             }
             
             gameState.isTelegramUser = false;
