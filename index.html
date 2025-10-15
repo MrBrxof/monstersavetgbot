@@ -13,8 +13,8 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
             color: white;
             height: 100vh;
             overflow: hidden;
@@ -32,37 +32,45 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 15px;
-            background: rgba(0, 0, 0, 0.7);
-            border-bottom: 2px solid #00b4d8;
+            padding: 12px 20px;
+            background: rgba(10, 10, 20, 0.95);
+            border-bottom: 1px solid rgba(0, 180, 216, 0.3);
+            backdrop-filter: blur(10px);
             z-index: 1000;
         }
 
         .currency {
-            background: linear-gradient(135deg, #f9c74f, #f8961e);
-            padding: 8px 15px;
-            border-radius: 20px;
+            background: linear-gradient(135deg, #ffd700, #ff6b00);
+            padding: 10px 20px;
+            border-radius: 25px;
             font-weight: bold;
             color: #1a1a2e;
-            box-shadow: 0 4px 15px rgba(248, 150, 30, 0.3);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-size: 14px;
         }
 
         .role-display {
-            background: rgba(0, 180, 216, 0.9);
-            padding: 8px 15px;
-            border-radius: 20px;
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+            padding: 10px 20px;
+            border-radius: 25px;
             font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 180, 216, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
         .role-monster {
-            background: rgba(231, 29, 54, 0.9);
+            background: linear-gradient(135deg, #e71d36, #ff6b6b);
+            box-shadow: 0 4px 20px rgba(231, 29, 54, 0.4);
         }
 
         /* Map Container */
         #map-container {
             flex: 1;
             position: relative;
+            overflow: hidden;
         }
 
         #map {
@@ -70,81 +78,158 @@
             height: 100%;
         }
 
+        /* Player Info Overlay */
+        #player-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(10, 10, 20, 0.9);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 180, 216, 0.3);
+            backdrop-filter: blur(10px);
+            z-index: 500;
+            min-width: 200px;
+        }
+
+        .player-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-label {
+            color: #88ccff;
+            font-size: 12px;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
         /* Tabs Navigation */
         #tabs {
             display: flex;
-            background: rgba(0, 0, 0, 0.8);
-            border-top: 1px solid #00b4d8;
+            background: rgba(10, 10, 20, 0.95);
+            border-top: 1px solid rgba(0, 180, 216, 0.3);
+            backdrop-filter: blur(10px);
         }
 
         .tab {
             flex: 1;
-            padding: 15px;
+            padding: 16px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.1);
+            background: transparent;
             border: none;
-            color: white;
-            font-size: 16px;
+            color: #88ccff;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00b4d8, #0077b6);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
 
         .tab.active {
-            background: #00b4d8;
-            font-weight: bold;
+            color: white;
+            background: rgba(0, 180, 216, 0.1);
+        }
+
+        .tab.active::before {
+            width: 100%;
         }
 
         .tab:hover {
-            background: rgba(0, 180, 216, 0.6);
+            color: white;
+            background: rgba(0, 180, 216, 0.05);
         }
 
         /* Content Areas */
         .content {
             display: none;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            background: rgba(10, 10, 20, 0.9);
             height: 300px;
             overflow-y: auto;
+            backdrop-filter: blur(10px);
         }
 
         #game-content {
             display: block;
         }
 
+        .content h3 {
+            color: #00b4d8;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
         /* Player Marker Styles */
         .player-marker {
             position: relative;
             text-align: center;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
         }
 
         .player-avatar {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             border: 3px solid;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             background-size: cover;
             background-position: center;
-            margin: 0 auto 5px;
+            margin: 0 auto 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
         }
 
         .survivor-avatar {
             border-color: #00b4d8;
-            box-shadow: 0 0 10px #00b4d8;
+            box-shadow: 0 0 20px rgba(0, 180, 216, 0.6);
         }
 
         .monster-avatar {
             border-color: #e71d36;
-            box-shadow: 0 0 10px #e71d36;
-            animation: pulse 2s infinite;
+            box-shadow: 0 0 20px rgba(231, 29, 54, 0.6);
+            animation: monsterPulse 2s infinite;
         }
 
         .player-name {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 12px;
+            background: rgba(10, 10, 20, 0.9);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
             white-space: nowrap;
-            margin-top: 5px;
+            margin-top: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
         }
 
         .player-zone {
@@ -152,86 +237,118 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            border: 2px dashed;
+            width: 120px;
+            height: 120px;
+            border: 2px solid;
             border-radius: 50%;
             pointer-events: none;
-        }
-
-        .survivor-zone {
-            border-color: rgba(0, 180, 216, 0.5);
-            background: rgba(0, 180, 216, 0.1);
-        }
-
-        .monster-zone {
-            border-color: rgba(231, 29, 54, 0.5);
-            background: rgba(231, 29, 54, 0.1);
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        /* Shop Styles */
-        .shop-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .shop-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid #00b4d8;
-            cursor: pointer;
+            opacity: 0.4;
             transition: all 0.3s ease;
         }
 
-        .shop-item:hover {
-            background: rgba(0, 180, 216, 0.2);
-            transform: translateY(-2px);
+        .survivor-zone {
+            border-color: #00b4d8;
+            background: radial-gradient(circle, rgba(0, 180, 216, 0.1) 0%, transparent 70%);
         }
 
-        .item-price {
-            color: #f9c74f;
+        .monster-zone {
+            border-color: #e71d36;
+            background: radial-gradient(circle, rgba(231, 29, 54, 0.15) 0%, transparent 70%);
+            animation: zonePulse 3s infinite;
+        }
+
+        @keyframes monsterPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes zonePulse {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        /* Game Stats */
+        .game-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
             font-weight: bold;
-            margin-top: 5px;
+            color: #00b4d8;
+            margin-bottom: 5px;
+        }
+
+        .stat-label-large {
+            font-size: 12px;
+            color: #88ccff;
         }
 
         /* Account Styles */
         .account-info {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .account-avatar {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             border: 4px solid #00b4d8;
             margin: 0 auto 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             background-size: cover;
             background-position: center;
-        }
-
-        .stats {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-
-        .stat-item {
             display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 180, 216, 0.4);
+        }
+
+        .account-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .account-role {
+            color: #88ccff;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .kill-counter {
+            background: linear-gradient(135deg, #e71d36, #ff6b6b);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(231, 29, 54, 0.3);
+        }
+
+        .kill-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
         /* Location Permission */
@@ -240,31 +357,71 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(26, 26, 46, 0.95);
-            padding: 30px;
-            border-radius: 20px;
+            background: rgba(10, 10, 20, 0.98);
+            padding: 40px;
+            border-radius: 25px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
             z-index: 1000;
-            border: 2px solid #00b4d8;
-            max-width: 300px;
+            border: 2px solid rgba(0, 180, 216, 0.5);
+            max-width: 350px;
             width: 90%;
+            backdrop-filter: blur(20px);
+        }
+
+        .permission-title {
+            color: #00b4d8;
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .permission-text {
+            color: #88ccff;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
 
         .permission-btn {
             background: linear-gradient(135deg, #00b4d8, #0077b6);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
+            padding: 15px 40px;
+            border-radius: 30px;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            margin-top: 15px;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 180, 216, 0.4);
         }
 
         .permission-btn:hover {
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 180, 216, 0.6);
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(10, 10, 20, 0.95);
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 4px solid #00b4d8;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.monster {
+            border-left-color: #e71d36;
         }
     </style>
 </head>
@@ -272,92 +429,105 @@
     <div id="app">
         <!-- Header -->
         <div id="header">
-            <div class="currency">💰 <span id="coins">100</span> монет</div>
-            <div class="role-display" id="role-display">Вы: Выживший</div>
+            <div class="currency">💰 <span id="coins">0</span> монет</div>
+            <div class="role-display" id="role-display">🎯 Вы: Выживший</div>
         </div>
 
         <!-- Map Container -->
         <div id="map-container">
             <div id="map"></div>
+            
+            <!-- Player Info Overlay -->
+            <div id="player-overlay">
+                <div class="player-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Убийств:</span>
+                        <span class="stat-value" id="overlay-kills">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Заработано:</span>
+                        <span class="stat-value" id="overlay-earned">0 монет</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">В игре:</span>
+                        <span class="stat-value" id="overlay-time">0м</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Tabs -->
         <div id="tabs">
             <button class="tab active" onclick="switchTab('game')">🎮 Игра</button>
-            <button class="tab" onclick="switchTab('shop')">🛍️ Магазин</button>
             <button class="tab" onclick="switchTab('account')">👤 Аккаунт</button>
         </div>
 
         <!-- Content Areas -->
         <div id="game-content" class="content">
             <h3>Текущая игра</h3>
-            <p>На карте отображены другие игроки. Остерегайтесь монстров!</p>
-            <div id="game-stats">
-                <div class="stat-item">
-                    <span>Игроков онлайн:</span>
-                    <span id="online-count">1</span>
+            <p>Перемещайтесь по карте и избегайте монстров! За каждое убийство получайте 10 монет.</p>
+            
+            <div class="game-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="online-count">1</div>
+                    <div class="stat-label-large">Игроков онлайн</div>
                 </div>
-                <div class="stat-item">
-                    <span>Монстров:</span>
-                    <span id="monsters-count">0</span>
+                <div class="stat-card">
+                    <div class="stat-number" id="monsters-count">0</div>
+                    <div class="stat-label-large">Активных монстров</div>
                 </div>
-            </div>
-        </div>
-
-        <div id="shop-content" class="content">
-            <h3>Магазин</h3>
-            <div class="shop-items">
-                <div class="shop-item" onclick="buyItem('shield')">
-                    <div>🛡️ Щит защиты</div>
-                    <div class="item-price">50 монет</div>
-                    <small>Защита от превращения</small>
+                <div class="stat-card">
+                    <div class="stat-number" id="survivors-count">1</div>
+                    <div class="stat-label-large">Выживших</div>
                 </div>
-                <div class="shop-item" onclick="buyItem('speed')">
-                    <div>⚡ Ускорение</div>
-                    <div class="item-price">30 монет</div>
-                    <small>+20% к скорости</small>
-                </div>
-                <div class="shop-item" onclick="buyItem('zone')">
-                    <div>🔍 Увеличение зоны</div>
-                    <div class="item-price">70 монет</div>
-                    <small>+50% к радиусу</small>
-                </div>
-                <div class="shop-item" onclick="buyItem('avatar')">
-                    <div>🎭 Смена аватарки</div>
-                    <div class="item-price">20 монет</div>
-                    <small>Особый стиль</small>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-kills">0</div>
+                    <div class="stat-label-large">Всего убийств</div>
                 </div>
             </div>
         </div>
 
         <div id="account-content" class="content">
             <div class="account-info">
-                <div id="account-avatar" class="account-avatar"></div>
-                <h3 id="account-username">Игрок</h3>
+                <div id="account-avatar" class="account-avatar">?</div>
+                <div class="account-name" id="account-username">Игрок</div>
+                <div class="account-role" id="account-role">Выживший</div>
             </div>
-            <div class="stats">
-                <h4>Статистика</h4>
-                <div class="stat-item">
-                    <span>Убито людей:</span>
-                    <span id="kills-count">0</span>
+            
+            <div class="stats-grid">
+                <div class="kill-counter">
+                    <div class="kill-number" id="account-kills">0</div>
+                    <div>УБИТЫХ ИГРОКОВ</div>
                 </div>
-                <div class="stat-item">
-                    <span>Время в игре:</span>
-                    <span id="play-time">0ч 0м</span>
+                <div class="stat-card">
+                    <div class="stat-number" id="account-coins">0</div>
+                    <div class="stat-label-large">ЗАРАБОТАНО МОНЕТ</div>
                 </div>
-                <div class="stat-item">
-                    <span>Статус:</span>
-                    <span id="account-status">Выживший</span>
+                <div class="stat-card">
+                    <div class="stat-number" id="account-playtime">0м</div>
+                    <div class="stat-label-large">ВРЕМЯ В ИГРЕ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="account-efficiency">0%</div>
+                    <div class="stat-label-large">ЭФФЕКТИВНОСТЬ</div>
                 </div>
             </div>
         </div>
 
         <!-- Location Permission -->
         <div id="location-permission">
-            <h3>📍 Доступ к геолокации</h3>
-            <p>Для участия в игре необходим доступ к вашему местоположению</p>
+            <div class="permission-title">📍 Доступ к геолокации</div>
+            <div class="permission-text">
+                Для участия в игре необходим доступ к вашему местоположению. 
+                Это позволит другим игрокам видеть вас на карте и взаимодействовать с вами.
+            </div>
             <button id="grant-permission" class="permission-btn">Разрешить доступ</button>
         </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div id="notification-text"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -368,11 +538,13 @@
             currentUser: null,
             map: null,
             userMarker: null,
+            userZone: null,
             isTelegramUser: false,
-            coins: 100,
+            coins: 0,
             kills: 0,
-            role: 'survivor', // 'survivor' или 'monster'
-            playTime: 0
+            role: 'survivor',
+            playTime: 0,
+            totalEarned: 0
         };
 
         // Инициализация приложения
@@ -400,18 +572,17 @@
             } else {
                 gameState.currentUser = {
                     id: Date.now(),
-                    firstName: 'Аноним',
+                    firstName: 'Игрок',
                     username: 'player_' + Math.random().toString(36).substr(2, 5),
                     isTelegram: false
                 };
             }
             
-            // Добавляем текущего пользователя в список игроков
             gameState.players.set(gameState.currentUser.id, {
                 ...gameState.currentUser,
                 role: 'survivor',
                 location: null,
-                coins: 100,
+                coins: 0,
                 kills: 0
             });
         }
@@ -419,11 +590,9 @@
         // Настройка обработчиков событий
         function setupEventListeners() {
             document.getElementById('grant-permission').addEventListener('click', requestLocationAccess);
-            
-            // Симуляция других игроков
-            setInterval(simulateOtherPlayers, 5000);
+            setInterval(simulateOtherPlayers, 4000);
             setInterval(updateGameState, 1000);
-            setInterval(checkPlayerInteractions, 2000);
+            setInterval(checkPlayerInteractions, 1500);
         }
 
         // Запрос доступа к геолокации
@@ -437,7 +606,6 @@
                     },
                     (error) => {
                         console.error('Ошибка геолокации:', error);
-                        // Используем координаты по умолчанию
                         initMap(55.7558, 37.6173);
                         document.getElementById('location-permission').style.display = 'none';
                         startGame();
@@ -455,7 +623,6 @@
                 attribution: '© OpenStreetMap contributors'
             }).addTo(gameState.map);
 
-            // Добавляем текущего пользователя на карту
             addPlayerToMap(gameState.currentUser, lat, lng, true);
         }
 
@@ -476,36 +643,51 @@
             const icon = L.divIcon({
                 html: markerHtml,
                 className: 'player-icon',
-                iconSize: [60, 80],
-                iconAnchor: [30, 70]
+                iconSize: [70, 90],
+                iconAnchor: [35, 85]
             });
 
             const marker = L.marker([lat, lng], { icon }).addTo(gameState.map);
             
             if (isCurrentUser) {
                 gameState.userMarker = marker;
+                // Создаем зону для текущего пользователя
+                createUserZone(lat, lng, isMonster);
             }
 
-            // Добавляем popup с информацией об игроке
             const roleText = isMonster ? '🔴 Монстр' : '🔵 Выживший';
             marker.bindPopup(`
-                <b>${player.firstName}</b><br>
-                ${roleText}<br>
-                Убийств: ${player.kills || 0}
+                <div style="text-align: center; padding: 10px;">
+                    <b>${player.firstName}</b><br>
+                    ${roleText}<br>
+                    Убийств: ${player.kills || 0}<br>
+                    Монет: ${player.coins || 0}
+                </div>
             `);
 
             return marker;
         }
 
+        // Создание зоны вокруг пользователя
+        function createUserZone(lat, lng, isMonster) {
+            if (gameState.userZone) {
+                gameState.map.removeLayer(gameState.userZone);
+            }
+
+            const zoneColor = isMonster ? '#e71d36' : '#00b4d8';
+            gameState.userZone = L.circle([lat, lng], {
+                color: zoneColor,
+                fillColor: zoneColor,
+                fillOpacity: 0.1,
+                radius: 50 // 50 метров
+            }).addTo(gameState.map);
+        }
+
         // Запуск игры
         function startGame() {
-            // Симуляция начальных игроков
             simulateInitialPlayers();
-            
-            // Обновление UI
             updateUI();
             
-            // Таймер игрового времени
             setInterval(() => {
                 gameState.playTime++;
                 updatePlayTime();
@@ -515,29 +697,45 @@
         // Симуляция начальных игроков
         function simulateInitialPlayers() {
             const userPos = gameState.userMarker.getLatLng();
-            
-            // Добавляем 3-5 случайных игроков
-            const initialPlayers = 3 + Math.floor(Math.random() * 3);
+            const initialPlayers = 4 + Math.floor(Math.random() * 4);
+            const names = ['Алексей', 'Мария', 'Дмитрий', 'Анна', 'Сергей', 'Ольга', 'Иван', 'Екатерина'];
             
             for (let i = 0; i < initialPlayers; i++) {
-                const lat = userPos.lat + (Math.random() - 0.5) * 0.01;
-                const lng = userPos.lng + (Math.random() - 0.5) * 0.01;
+                const lat = userPos.lat + (Math.random() - 0.5) * 0.02;
+                const lng = userPos.lng + (Math.random() - 0.5) * 0.02;
                 
                 const player = {
                     id: 'bot_' + i,
-                    firstName: ['Алексей', 'Мария', 'Дмитрий', 'Анна', 'Сергей'][i],
+                    firstName: names[i % names.length],
                     username: 'bot' + i,
-                    role: Math.random() > 0.7 ? 'monster' : 'survivor',
-                    kills: Math.floor(Math.random() * 10),
-                    coins: 50 + Math.floor(Math.random() * 150),
-                    isTelegram: false
+                    role: Math.random() > 0.8 ? 'monster' : 'survivor',
+                    kills: Math.floor(Math.random() * 5),
+                    coins: Math.floor(Math.random() * 50),
+                    isTelegram: false,
+                    location: { lat, lng }
                 };
                 
                 gameState.players.set(player.id, player);
                 addPlayerToMap(player, lat, lng);
+                
+                // Создаем зоны для ботов
+                createBotZone(player, lat, lng);
             }
             
             updatePlayerCounts();
+        }
+
+        // Создание зоны для бота
+        function createBotZone(player, lat, lng) {
+            const zoneColor = player.role === 'monster' ? '#e71d36' : '#00b4d8';
+            const zone = L.circle([lat, lng], {
+                color: zoneColor,
+                fillColor: zoneColor,
+                fillOpacity: 0.08,
+                radius: 50
+            }).addTo(gameState.map);
+            
+            player.zone = zone;
         }
 
         // Симуляция движения других игроков
@@ -546,18 +744,16 @@
             
             gameState.players.forEach((player, id) => {
                 if (id !== gameState.currentUser.id && id.startsWith('bot_')) {
-                    // Случайное движение ботов
                     const currentMarker = Object.values(gameState.map._layers).find(
                         layer => layer._icon && layer._icon.innerHTML.includes(player.firstName)
                     );
                     
-                    if (currentMarker) {
-                        const newLat = currentMarker.getLatLng().lat + (Math.random() - 0.5) * 0.0005;
-                        const newLng = currentMarker.getLatLng().lng + (Math.random() - 0.5) * 0.0005;
+                    if (currentMarker && player.zone) {
+                        const newLat = currentMarker.getLatLng().lat + (Math.random() - 0.5) * 0.0003;
+                        const newLng = currentMarker.getLatLng().lng + (Math.random() - 0.5) * 0.0003;
                         
                         currentMarker.setLatLng([newLat, newLng]);
-                        
-                        // Обновляем позицию в данных игрока
+                        player.zone.setLatLng([newLat, newLng]);
                         player.location = { lat: newLat, lng: newLng };
                     }
                 }
@@ -566,21 +762,26 @@
 
         // Проверка взаимодействий между игроками
         function checkPlayerInteractions() {
-            if (!gameState.userMarker || gameState.role === 'monster') return;
+            if (!gameState.userMarker) return;
 
             const userPos = gameState.userMarker.getLatLng();
-            const userZoneRadius = 0.0002; // Радиус зоны в градусах
+            const userZoneRadius = 0.00045; // ~50 метров
 
             gameState.players.forEach((player, id) => {
-                if (id !== gameState.currentUser.id && player.role === 'monster' && player.location) {
+                if (id !== gameState.currentUser.id && player.location) {
                     const distance = Math.sqrt(
                         Math.pow(player.location.lat - userPos.lat, 2) + 
                         Math.pow(player.location.lng - userPos.lng, 2)
                     );
 
                     if (distance < userZoneRadius) {
-                        // Монстр вошел в зону - превращаем пользователя в монстра
-                        becomeMonster();
+                        if (player.role === 'monster' && gameState.role === 'survivor') {
+                            // Монстр вошел в зону - превращаем пользователя в монстра
+                            becomeMonster();
+                        } else if (gameState.role === 'monster' && player.role === 'survivor') {
+                            // Игрок-монстр убивает выжившего
+                            killSurvivor(player, id);
+                        }
                     }
                 }
             });
@@ -591,43 +792,79 @@
             gameState.role = 'monster';
             gameState.players.get(gameState.currentUser.id).role = 'monster';
             
-            // Обновляем UI
-            updateUI();
+            // Обновляем зону
+            createUserZone(gameState.userMarker.getLatLng().lat, gameState.userMarker.getLatLng().lng, true);
             
-            // Показываем сообщение
-            alert('💀 Монстр заразил вас! Теперь вы тоже монстр.');
+            showNotification('💀 Вы стали монстром! Теперь вы можете заражать других игроков.');
+            updateUI();
+        }
+
+        // Убийство выжившего
+        function killSurvivor(survivor, survivorId) {
+            gameState.kills++;
+            gameState.coins += 10;
+            gameState.totalEarned += 10;
+            
+            // Обновляем статистику выжившего
+            survivor.kills = survivor.kills || 0;
+            
+            showNotification(`🎯 Вы убили ${survivor.firstName}! +10 монет`);
+            
+            // "Возрождаем" выжившего как монстра
+            setTimeout(() => {
+                gameState.players.get(survivorId).role = 'monster';
+                // Здесь можно обновить маркер на карте
+            }, 3000);
+            
+            updateUI();
+        }
+
+        // Показать уведомление
+        function showNotification(message, isMonster = false) {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notification-text');
+            
+            text.textContent = message;
+            notification.className = `notification ${isMonster ? 'monster' : ''} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
 
         // Обновление игрового состояния
         function updateGameState() {
-            // Каждый день случайная смена роли (для демонстрации - раз в 30 секунд)
-            if (Math.random() < 0.01) { // 1% шанс каждую секунду
-                const newRole = Math.random() > 0.5 ? 'monster' : 'survivor';
-                if (newRole !== gameState.role) {
-                    gameState.role = newRole;
-                    gameState.players.get(gameState.currentUser.id).role = newRole;
-                    updateUI();
-                }
+            // Случайная смена ролей у ботов (5% шанс каждую секунду)
+            if (Math.random() < 0.05) {
+                gameState.players.forEach((player, id) => {
+                    if (id.startsWith('bot_') && Math.random() < 0.3) {
+                        const newRole = player.role === 'survivor' ? 'monster' : 'survivor';
+                        player.role = newRole;
+                        
+                        // Обновляем зону бота
+                        if (player.zone) {
+                            gameState.map.removeLayer(player.zone);
+                            createBotZone(player, player.location.lat, player.location.lng);
+                        }
+                    }
+                });
+                updatePlayerCounts();
             }
         }
 
         // Обновление интерфейса
         function updateUI() {
-            // Обновляем роль в хедере
             const roleDisplay = document.getElementById('role-display');
-            const roleText = gameState.role === 'monster' ? '🔴 Монстр' : '🔵 Выживший';
-            roleDisplay.textContent = `Вы: ${roleText}`;
+            const roleText = gameState.role === 'monster' ? '👹 Вы: Монстр' : '🎯 Вы: Выживший';
+            roleDisplay.textContent = roleText;
             roleDisplay.className = `role-display ${gameState.role === 'monster' ? 'role-monster' : ''}`;
 
-            // Обновляем монеты
             document.getElementById('coins').textContent = gameState.coins;
+            document.getElementById('overlay-kills').textContent = gameState.kills;
+            document.getElementById('overlay-earned').textContent = gameState.totalEarned + ' монет';
+            document.getElementById('account-kills').textContent = gameState.kills;
+            document.getElementById('account-coins').textContent = gameState.coins;
 
-            // Обновляем статистику аккаунта
-            document.getElementById('kills-count').textContent = gameState.kills;
-            document.getElementById('account-status').textContent = 
-                gameState.role === 'monster' ? 'Монстр' : 'Выживший';
-
-            // Обновляем аватарку аккаунта
             const accountAvatar = document.getElementById('account-avatar');
             if (gameState.currentUser.photoUrl) {
                 accountAvatar.style.backgroundImage = `url(${gameState.currentUser.photoUrl})`;
@@ -639,79 +876,61 @@
             }
 
             document.getElementById('account-username').textContent = gameState.currentUser.firstName;
+            document.getElementById('account-role').textContent = 
+                gameState.role === 'monster' ? 'Монстр' : 'Выживший';
         }
 
         // Обновление времени игры
         function updatePlayTime() {
-            const hours = Math.floor(gameState.playTime / 60);
-            const minutes = gameState.playTime % 60;
-            document.getElementById('play-time').textContent = `${hours}ч ${minutes}м`;
+            const minutes = gameState.playTime;
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            
+            const timeString = hours > 0 ? `${hours}ч ${mins}м` : `${mins}м`;
+            
+            document.getElementById('overlay-time').textContent = timeString;
+            document.getElementById('account-playtime').textContent = timeString;
+            
+            // Обновляем эффективность (убийств в час)
+            const efficiency = hours > 0 ? Math.round((gameState.kills / hours) * 100) : gameState.kills * 100;
+            document.getElementById('account-efficiency').textContent = efficiency + '%';
         }
 
         // Обновление счетчиков игроков
         function updatePlayerCounts() {
             let monsters = 0;
+            let survivors = 0;
             let total = 0;
+            let totalKills = 0;
 
             gameState.players.forEach(player => {
                 total++;
-                if (player.role === 'monster') monsters++;
+                totalKills += player.kills || 0;
+                if (player.role === 'monster') {
+                    monsters++;
+                } else {
+                    survivors++;
+                }
             });
 
             document.getElementById('online-count').textContent = total;
             document.getElementById('monsters-count').textContent = monsters;
+            document.getElementById('survivors-count').textContent = survivors;
+            document.getElementById('total-kills').textContent = totalKills;
         }
 
         // Переключение вкладок
         function switchTab(tabName) {
-            // Скрываем все вкладки
             document.querySelectorAll('.content').forEach(content => {
                 content.style.display = 'none';
             });
             
-            // Убираем активный класс со всех кнопок
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            // Показываем выбранную вкладку
             document.getElementById(tabName + '-content').style.display = 'block';
             event.target.classList.add('active');
-        }
-
-        // Покупка предметов в магазине
-        function buyItem(itemType) {
-            const prices = {
-                shield: 50,
-                speed: 30,
-                zone: 70,
-                avatar: 20
-            };
-
-            const price = prices[itemType];
-            
-            if (gameState.coins >= price) {
-                gameState.coins -= price;
-                
-                switch(itemType) {
-                    case 'shield':
-                        alert('🛡️ Щит активирован! Вы защищены от превращения на 24 часа.');
-                        break;
-                    case 'speed':
-                        alert('⚡ Ускорение активировано!');
-                        break;
-                    case 'zone':
-                        alert('🔍 Зона увеличена!');
-                        break;
-                    case 'avatar':
-                        alert('🎭 Аватарка изменена!');
-                        break;
-                }
-                
-                updateUI();
-            } else {
-                alert('❌ Недостаточно монет!');
-            }
         }
 
         // Запуск приложения при загрузке
