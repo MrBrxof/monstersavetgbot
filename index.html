@@ -397,33 +397,6 @@
             0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
             50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.05); }
         }
-
-        /* Role Change Timer */
-        .role-timer {
-            position: absolute;
-            top: 80px;
-            left: 20px;
-            background: rgba(15, 15, 35, 0.9);
-            padding: 12px 16px;
-            border-radius: 15px;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            backdrop-filter: blur(10px);
-            z-index: 500;
-            font-size: 12px;
-            color: #88ddff;
-            text-align: center;
-            min-width: 200px;
-        }
-
-        .timer-text {
-            margin-bottom: 5px;
-        }
-
-        .timer-value {
-            font-weight: bold;
-            color: #00d4ff;
-            font-size: 14px;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -444,12 +417,6 @@
         <!-- Map Container -->
         <div id="map-container">
             <div id="map"></div>
-            
-            <!-- Role Change Timer -->
-            <div class="role-timer">
-                <div class="timer-text">Смена роли через:</div>
-                <div class="timer-value" id="role-timer">23:59:59</div>
-            </div>
         </div>
 
         <!-- Tabs -->
@@ -554,8 +521,7 @@
             totalEarned: 0,
             locationGranted: false,
             lastPosition: null,
-            lastRoleChange: null,
-            roleChangeInterval: null
+            lastRoleChange: null
         };
 
         // Ключи для localStorage
@@ -566,6 +532,9 @@
             LAST_ROLE_CHANGE: 'lastRoleChange'
         };
 
+        // Константы
+        const ONE_DAY_MS = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+
         // Загрузка сохраненных данных
         function loadSavedData() {
             try {
@@ -575,10 +544,8 @@
                     const data = JSON.parse(savedGameData);
                     gameState.coins = data.coins || 0;
                     gameState.kills = data.kills || 0;
-                    gameState.role = data.role || 'survivor';
                     gameState.playTime = data.playTime || 0;
                     gameState.totalEarned = data.totalEarned || 0;
-                    console.log('💾 Игровые данные загружены');
                 }
 
                 // Загружаем статус разрешения геолокации
@@ -591,12 +558,44 @@
                     gameState.lastPosition = JSON.parse(lastPosition);
                 }
 
-                // Загружаем время последней смены роли
+                // Загружаем время последней смены роли и определяем текущую роль
                 const lastRoleChange = localStorage.getItem(STORAGE_KEYS.LAST_ROLE_CHANGE);
-                gameState.lastRoleChange = lastRoleChange ? parseInt(lastRoleChange) : Date.now();
+                if (lastRoleChange) {
+                    gameState.lastRoleChange = parseInt(lastRoleChange);
+                    determineCurrentRole();
+                } else {
+                    // Первый запуск - устанавливаем текущее время
+                    gameState.lastRoleChange = Date.now();
+                    saveRoleChangeTime();
+                }
 
             } catch (e) {
                 console.error('❌ Ошибка загрузки данных:', e);
+            }
+        }
+
+        // Определение текущей роли на основе времени
+        function determineCurrentRole() {
+            const now = Date.now();
+            const timeSinceLastChange = now - gameState.lastRoleChange;
+            const daysSinceLastChange = Math.floor(timeSinceLastChange / ONE_DAY_MS);
+            
+            // Если прошло нечетное количество дней - меняем роль
+            // (0 дней - исходная роль, 1 день - сменилась, 2 дня - вернулась и т.д.)
+            const shouldChangeRole = daysSinceLastChange % 2 === 1;
+            
+            if (shouldChangeRole) {
+                // Определяем исходную роль (предполагаем, что изначально был выживший)
+                const originalRole = 'survivor';
+                gameState.role = originalRole === 'survivor' ? 'monster' : 'survivor';
+                
+                // Обновляем время смены роли на начало текущего дня
+                const daysToSubtract = daysSinceLastChange - 1;
+                gameState.lastRoleChange = now - (daysToSubtract * ONE_DAY_MS);
+                saveRoleChangeTime();
+                saveGameData();
+                
+                console.log(`🎭 Роль автоматически изменена на: ${gameState.role}`);
             }
         }
 
@@ -647,53 +646,6 @@
             }
         }
 
-        // Проверка и смена роли
-        function checkAndChangeRole() {
-            const now = Date.now();
-            const timeSinceLastChange = now - gameState.lastRoleChange;
-            const oneDay = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
-
-            if (timeSinceLastChange >= oneDay) {
-                // Меняем роль
-                const newRole = gameState.role === 'survivor' ? 'monster' : 'survivor';
-                gameState.role = newRole;
-                gameState.lastRoleChange = now;
-                
-                // Сохраняем время смены
-                saveRoleChangeTime();
-                saveGameData();
-                
-                // Обновляем интерфейс
-                updateUI();
-                
-                // Показываем уведомление
-                const roleText = newRole === 'monster' ? 'монстра' : 'выжившего';
-                showNotification(`🎭 Ваша роль изменена на ${roleText}!`, newRole === 'monster');
-                
-                console.log(`🎭 Роль изменена на: ${newRole}`);
-            }
-        }
-
-        // Обновление таймера смены роли
-        function updateRoleTimer() {
-            const now = Date.now();
-            const timeSinceLastChange = now - gameState.lastRoleChange;
-            const oneDay = 24 * 60 * 60 * 1000;
-            const timeUntilNextChange = oneDay - timeSinceLastChange;
-
-            if (timeUntilNextChange <= 0) {
-                document.getElementById('role-timer').textContent = '00:00:00';
-                checkAndChangeRole();
-            } else {
-                const hours = Math.floor(timeUntilNextChange / (60 * 60 * 1000));
-                const minutes = Math.floor((timeUntilNextChange % (60 * 60 * 1000)) / (60 * 1000));
-                const seconds = Math.floor((timeUntilNextChange % (60 * 1000)) / 1000);
-                
-                document.getElementById('role-timer').textContent = 
-                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }
-        }
-
         // Функция для получения данных пользователя из Telegram
         function getUserData() {
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -727,12 +679,6 @@
             
             // Загружаем все сохраненные данные
             loadSavedData();
-            
-            // Проверяем смену роли
-            checkAndChangeRole();
-            
-            // Запускаем таймер смены роли
-            gameState.roleChangeInterval = setInterval(updateRoleTimer, 1000);
             
             // Проверяем Telegram
             const telegramCheck = checkTelegramWebApp();
@@ -978,9 +924,6 @@
 
             window.addEventListener('beforeunload', () => {
                 clearInterval(playTimeInterval);
-                if (gameState.roleChangeInterval) {
-                    clearInterval(gameState.roleChangeInterval);
-                }
                 saveGameData();
             });
         }
