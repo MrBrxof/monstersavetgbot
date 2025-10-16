@@ -43,35 +43,39 @@
 
         .currency {
             background: linear-gradient(135deg, #ffd700, #ffa500);
-            padding: 12px 25px;
-            border-radius: 30px;
+            padding: 8px 20px;
+            border-radius: 25px;
             font-weight: bold;
             color: #1a1a2e;
-            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            font-size: 15px;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-size: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
+            min-width: 120px;
+            justify-content: center;
         }
 
         .role-display {
             background: linear-gradient(135deg, #00d4ff, #0099cc);
-            padding: 12px 25px;
-            border-radius: 30px;
+            padding: 8px 20px;
+            border-radius: 25px;
             font-weight: bold;
-            box-shadow: 0 6px 25px rgba(0, 212, 255, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            font-size: 15px;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-size: 14px;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
+            min-width: 180px;
+            justify-content: center;
         }
 
         .role-monster {
             background: linear-gradient(135deg, #ff4444, #cc0000);
-            box-shadow: 0 6px 25px rgba(255, 68, 68, 0.5);
+            box-shadow: 0 4px 20px rgba(255, 68, 68, 0.4);
         }
 
         /* Map Container */
@@ -393,51 +397,92 @@
             0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
             50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.05); }
         }
+
+        /* Role Change Timer */
+        .role-timer {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            background: rgba(15, 15, 35, 0.9);
+            padding: 12px 16px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(10px);
+            z-index: 500;
+            font-size: 12px;
+            color: #88ddff;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .timer-text {
+            margin-bottom: 5px;
+        }
+
+        .timer-value {
+            font-weight: bold;
+            color: #00d4ff;
+            font-size: 14px;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div id="app">
         <!-- Header -->
         <div id="header">
-            <div class="currency">💰 <span id="coins">0</span> монет</div>
-            <div class="role-display" id="role-display">🎯 Вы: Выживший</div>
+            <div class="currency">
+                <i class="fas fa-coins"></i>
+                <span id="coins">0</span>
+            </div>
+            <div class="role-display" id="role-display">
+                <i class="fas fa-user-shield"></i>
+                <span>Вы: Выживший</span>
+            </div>
         </div>
 
         <!-- Map Container -->
         <div id="map-container">
             <div id="map"></div>
+            
+            <!-- Role Change Timer -->
+            <div class="role-timer">
+                <div class="timer-text">Смена роли через:</div>
+                <div class="timer-value" id="role-timer">23:59:59</div>
+            </div>
         </div>
 
         <!-- Tabs -->
         <div id="tabs">
-            <button class="tab active" onclick="switchTab('game')">🎮 Игра</button>
-            <button class="tab" onclick="switchTab('account')">👤 Аккаунт</button>
+            <button class="tab active" onclick="switchTab('game')">
+                <i class="fas fa-gamepad"></i>
+                <span>Игра</span>
+            </button>
+            <button class="tab" onclick="switchTab('account')">
+                <i class="fas fa-user"></i>
+                <span>Аккаунт</span>
+            </button>
         </div>
 
         <!-- Content Areas -->
         <div id="game-content" class="content">
-            <h3>🌍 Текущая игра</h3>
-            <p style="text-align: center; margin-bottom: 20px; color: #88ddff;">
-                Перемещайтесь по карте и избегайте монстров!<br>
-                За каждое убийство получайте 10 монет.
-            </p>
-            
+            <h3>🌍 Карта выживания</h3>
             <div class="game-stats-grid">
                 <div class="stat-card">
                     <div class="stat-number" id="online-count">1</div>
-                    <div class="stat-label-large">👥 Игроков онлайн</div>
+                    <div class="stat-label-large">👥 Онлайн</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="monsters-count">0</div>
-                    <div class="stat-label-large">👹 Активных монстров</div>
+                    <div class="stat-label-large">👹 Монстры</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="survivors-count">1</div>
-                    <div class="stat-label-large">🎯 Выживших</div>
+                    <div class="stat-label-large">🎯 Выжившие</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="total-kills">0</div>
-                    <div class="stat-label-large">💀 Всего убийств</div>
+                    <div class="stat-label-large">💀 Убийства</div>
                 </div>
             </div>
         </div>
@@ -456,11 +501,11 @@
                 </div>
                 <div class="account-stat">
                     <div class="account-stat-number" id="account-coins">0</div>
-                    <div class="account-stat-label">ЗАРАБОТАНО МОНЕТ</div>
+                    <div class="account-stat-label">ЗАРАБОТАНО</div>
                 </div>
                 <div class="account-stat">
                     <div class="account-stat-number" id="account-playtime">0м</div>
-                    <div class="account-stat-label">ВРЕМЯ В ИГРЕ</div>
+                    <div class="account-stat-label">В ИГРЕ</div>
                 </div>
                 <div class="account-stat">
                     <div class="account-stat-number" id="account-efficiency">0%</div>
@@ -508,7 +553,9 @@
             playTime: 0,
             totalEarned: 0,
             locationGranted: false,
-            lastPosition: null
+            lastPosition: null,
+            lastRoleChange: null,
+            roleChangeInterval: null
         };
 
         // Ключи для localStorage
@@ -516,7 +563,7 @@
             GAME_DATA: 'survivalGameData',
             LOCATION_GRANTED: 'locationGranted',
             LAST_POSITION: 'lastPosition',
-            PERMISSIONS: 'userPermissions'
+            LAST_ROLE_CHANGE: 'lastRoleChange'
         };
 
         // Загрузка сохраненных данных
@@ -537,14 +584,16 @@
                 // Загружаем статус разрешения геолокации
                 const locationGranted = localStorage.getItem(STORAGE_KEYS.LOCATION_GRANTED);
                 gameState.locationGranted = locationGranted === 'true';
-                console.log('📍 Статус геолокации:', gameState.locationGranted);
 
                 // Загружаем последнюю позицию
                 const lastPosition = localStorage.getItem(STORAGE_KEYS.LAST_POSITION);
                 if (lastPosition) {
                     gameState.lastPosition = JSON.parse(lastPosition);
-                    console.log('🗺️ Последняя позиция загружена:', gameState.lastPosition);
                 }
+
+                // Загружаем время последней смены роли
+                const lastRoleChange = localStorage.getItem(STORAGE_KEYS.LAST_ROLE_CHANGE);
+                gameState.lastRoleChange = lastRoleChange ? parseInt(lastRoleChange) : Date.now();
 
             } catch (e) {
                 console.error('❌ Ошибка загрузки данных:', e);
@@ -589,22 +638,73 @@
             }
         }
 
+        // Сохранение времени смены роли
+        function saveRoleChangeTime() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.LAST_ROLE_CHANGE, gameState.lastRoleChange.toString());
+            } catch (e) {
+                console.error('❌ Ошибка сохранения времени смены роли:', e);
+            }
+        }
+
+        // Проверка и смена роли
+        function checkAndChangeRole() {
+            const now = Date.now();
+            const timeSinceLastChange = now - gameState.lastRoleChange;
+            const oneDay = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+
+            if (timeSinceLastChange >= oneDay) {
+                // Меняем роль
+                const newRole = gameState.role === 'survivor' ? 'monster' : 'survivor';
+                gameState.role = newRole;
+                gameState.lastRoleChange = now;
+                
+                // Сохраняем время смены
+                saveRoleChangeTime();
+                saveGameData();
+                
+                // Обновляем интерфейс
+                updateUI();
+                
+                // Показываем уведомление
+                const roleText = newRole === 'monster' ? 'монстра' : 'выжившего';
+                showNotification(`🎭 Ваша роль изменена на ${roleText}!`, newRole === 'monster');
+                
+                console.log(`🎭 Роль изменена на: ${newRole}`);
+            }
+        }
+
+        // Обновление таймера смены роли
+        function updateRoleTimer() {
+            const now = Date.now();
+            const timeSinceLastChange = now - gameState.lastRoleChange;
+            const oneDay = 24 * 60 * 60 * 1000;
+            const timeUntilNextChange = oneDay - timeSinceLastChange;
+
+            if (timeUntilNextChange <= 0) {
+                document.getElementById('role-timer').textContent = '00:00:00';
+                checkAndChangeRole();
+            } else {
+                const hours = Math.floor(timeUntilNextChange / (60 * 60 * 1000));
+                const minutes = Math.floor((timeUntilNextChange % (60 * 60 * 1000)) / (60 * 1000));
+                const seconds = Math.floor((timeUntilNextChange % (60 * 1000)) / 1000);
+                
+                document.getElementById('role-timer').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+
         // Функция для получения данных пользователя из Telegram
         function getUserData() {
-            console.log('🔍 Проверка данных Telegram Web App...');
-            
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                console.log('✅ Данные пользователя найдены в initDataUnsafe');
                 return tg.initDataUnsafe.user;
             }
             
             if (tg.initData) {
                 try {
-                    console.log('🔍 Парсинг initData...');
                     const urlParams = new URLSearchParams(tg.initData);
                     const userStr = urlParams.get('user');
                     if (userStr) {
-                        console.log('✅ Данные пользователя найдены в initData');
                         return JSON.parse(decodeURIComponent(userStr));
                     }
                 } catch (e) {
@@ -612,7 +712,6 @@
                 }
             }
             
-            console.log('❌ Данные пользователя не найдены');
             return null;
         }
 
@@ -629,25 +728,26 @@
             // Загружаем все сохраненные данные
             loadSavedData();
             
+            // Проверяем смену роли
+            checkAndChangeRole();
+            
+            // Запускаем таймер смены роли
+            gameState.roleChangeInterval = setInterval(updateRoleTimer, 1000);
+            
             // Проверяем Telegram
             const telegramCheck = checkTelegramWebApp();
             
             if (telegramCheck) {
-                console.log('✅ Успешный вход через Telegram');
-                
                 // Проверяем, было ли уже разрешена геолокация
                 if (gameState.locationGranted) {
-                    console.log('📍 Геолокация уже разрешена, запускаем игру...');
                     startGameWithSavedLocation();
                 } else {
-                    console.log('📍 Запрашиваем геолокацию...');
                     document.getElementById('location-permission').style.display = 'block';
                 }
                 
                 setupEventListeners();
                 updateUI();
             } else {
-                console.log('❌ Не удалось определить Telegram');
                 showError('Пожалуйста, откройте игру через Telegram бота для корректной работы');
             }
         }
@@ -655,13 +755,9 @@
         // Запуск игры с сохраненной позицией
         function startGameWithSavedLocation() {
             if (gameState.lastPosition) {
-                // Используем сохраненную позицию
-                console.log('🗺️ Используем сохраненную позицию:', gameState.lastPosition);
                 initMap(gameState.lastPosition.lat, gameState.lastPosition.lng);
                 startGame();
             } else {
-                // Запрашиваем текущую позицию
-                console.log('🗺️ Запрашиваем текущую позицию...');
                 getCurrentLocation();
             }
         }
@@ -679,18 +775,16 @@
                     },
                     (error) => {
                         console.error('❌ Ошибка геолокации:', error);
-                        // Используем позицию по умолчанию
                         initMap(55.7558, 37.6173);
                         startGame();
                     },
                     { 
                         enableHighAccuracy: true, 
                         timeout: 10000,
-                        maximumAge: 300000 // 5 минут
+                        maximumAge: 300000
                     }
                 );
             } else {
-                // Геолокация не поддерживается
                 initMap(55.7558, 37.6173);
                 startGame();
             }
@@ -710,8 +804,6 @@
                     isTelegram: true,
                     languageCode: userData.language_code
                 };
-                
-                console.log('✅ Успешная инициализация Telegram пользователя:', gameState.currentUser);
                 return true;
             }
             
@@ -738,10 +830,10 @@
         function setupEventListeners() {
             document.getElementById('grant-permission').addEventListener('click', requestLocationAccess);
             setInterval(updateGameState, 1000);
-            setInterval(saveGameData, 30000); // Сохраняем каждые 30 секунд
+            setInterval(saveGameData, 30000);
         }
 
-        // Запрос доступа к геолокации (только при первом запуске)
+        // Запрос доступа к геолокации
         function requestLocationAccess() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -749,11 +841,9 @@
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
                         
-                        // Сохраняем что разрешили геолокацию
                         saveLocationGrantedStatus(true);
                         savePosition(lat, lng);
                         
-                        // Запускаем игру
                         initMap(lat, lng);
                         document.getElementById('location-permission').style.display = 'none';
                         startGame();
@@ -779,14 +869,12 @@
         function initMap(lat, lng) {
             gameState.map = L.map('map').setView([lat, lng], 16);
             
-            // Красивая светлая карта
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; OpenStreetMap &copy; CARTO',
                 subdomains: 'abcd',
                 maxZoom: 20
             }).addTo(gameState.map);
 
-            // Добавляем текущего пользователя на карту
             addPlayerToMap(gameState.currentUser, lat, lng, true);
         }
 
@@ -810,31 +898,27 @@
                 gameState.userMarker = marker;
                 createUserZone(lat, lng, isMonster);
                 
-                // Следим за перемещением пользователя и сохраняем позицию
                 if (navigator.geolocation) {
                     navigator.geolocation.watchPosition((position) => {
                         const newLat = position.coords.latitude;
                         const newLng = position.coords.longitude;
                         
-                        // Обновляем позицию на карте
                         marker.setLatLng([newLat, newLng]);
                         if (gameState.userZone) {
                             gameState.userZone.setLatLng([newLat, newLng]);
                         }
                         gameState.map.panTo([newLat, newLng]);
                         
-                        // Сохраняем новую позицию
                         savePosition(newLat, newLng);
                         
                     }, null, {
                         enableHighAccuracy: true,
-                        maximumAge: 30000, // 30 секунд
+                        maximumAge: 30000,
                         timeout: 15000
                     });
                 }
             }
 
-            // Popup с информацией
             const roleText = isMonster ? '👹 Монстр' : '🎯 Выживший';
             const statusText = isCurrentUser ? ' (Вы)' : '';
             
@@ -854,7 +938,7 @@
             return marker;
         }
 
-        // Создание маленькой зоны вокруг пользователя
+        // Создание зоны вокруг пользователя
         function createUserZone(lat, lng, isMonster) {
             if (gameState.userZone) {
                 gameState.map.removeLayer(gameState.userZone);
@@ -862,7 +946,6 @@
 
             const zoneColor = isMonster ? '#ff4444' : '#00d4ff';
             
-            // Маленькая зона (30 метров)
             gameState.userZone = L.circle([lat, lng], {
                 color: zoneColor,
                 fillColor: zoneColor,
@@ -875,7 +958,6 @@
 
         // Запуск игры
         function startGame() {
-            // Добавляем текущего пользователя в список игроков
             gameState.players.set(gameState.currentUser.id, {
                 ...gameState.currentUser,
                 role: gameState.role,
@@ -886,22 +968,20 @@
 
             updateUI();
             
-            // Таймер игрового времени
             const playTimeInterval = setInterval(() => {
                 gameState.playTime++;
                 updatePlayTime();
             }, 60000);
 
             showNotification('🎮 Добро пожаловать в игру!');
-            
-            // Сохраняем начальные данные
             saveGameData();
 
-            // Очистка при закрытии
             window.addEventListener('beforeunload', () => {
                 clearInterval(playTimeInterval);
+                if (gameState.roleChangeInterval) {
+                    clearInterval(gameState.roleChangeInterval);
+                }
                 saveGameData();
-                console.log('💾 Данные сохранены при закрытии');
             });
         }
 
@@ -912,10 +992,13 @@
 
         // Обновление интерфейса
         function updateUI() {
+            const isMonster = gameState.role === 'monster';
             const roleDisplay = document.getElementById('role-display');
-            const roleText = gameState.role === 'monster' ? '👹 Вы: Монстр' : '🎯 Вы: Выживший';
-            roleDisplay.textContent = roleText;
-            roleDisplay.className = `role-display ${gameState.role === 'monster' ? 'role-monster' : ''}`;
+            const roleText = isMonster ? '👹 Вы: Монстр' : '🎯 Вы: Выживший';
+            const roleIcon = isMonster ? 'fa-skull' : 'fa-user-shield';
+            
+            roleDisplay.innerHTML = `<i class="fas ${roleIcon}"></i><span>${roleText}</span>`;
+            roleDisplay.className = `role-display ${isMonster ? 'role-monster' : ''}`;
 
             document.getElementById('coins').textContent = gameState.coins;
             document.getElementById('account-kills').textContent = gameState.kills;
@@ -934,8 +1017,11 @@
             if (gameState.currentUser) {
                 document.getElementById('account-username').textContent = gameState.currentUser.firstName;
             }
-            document.getElementById('account-role').textContent = 
-                gameState.role === 'monster' ? '👹 Монстр' : '🎯 Выживший';
+            
+            const accountRoleElement = document.getElementById('account-role');
+            accountRoleElement.textContent = isMonster ? '👹 Монстр' : '🎯 Выживший';
+            accountRoleElement.style.background = isMonster ? 
+                'rgba(255, 68, 68, 0.2)' : 'rgba(0, 212, 255, 0.2)';
         }
 
         // Обновление времени игры
@@ -975,7 +1061,6 @@
 
         // Показать ошибку
         function showError(message) {
-            // Создаем временное сообщение об ошибке
             const errorDiv = document.createElement('div');
             errorDiv.style.cssText = `
                 position: fixed;
